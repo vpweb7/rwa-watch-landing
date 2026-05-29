@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RWA.Watch — Enter Access Code</title>
+  <link rel="icon" href="favicon.ico" />
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --blue:       #2563eb;
+      --blue-dark:  #1d4ed8;
+      --blue-light: #4d9eff;
+      --text:       #EAF1FF;
+      --muted:      rgba(234,241,255,.66);
+      --border:     rgba(120,185,255,.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: #000814;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* Background glow */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(37,99,235,0.12), transparent 60%),
+        radial-gradient(700px 600px at 80% 80%, rgba(77,163,255,0.07), transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: min(420px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 36px 40px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--blue), var(--blue-dark));
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .1px;
+    }
+
+    .desc {
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* 6-digit code input */
+    .code-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .code-row input {
+      width: 48px;
+      height: 58px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      caret-color: var(--blue-light);
+      transition: border-color .15s, box-shadow .15s;
+      -moz-appearance: textfield;
+    }
+    .code-row input::-webkit-outer-spin-button,
+    .code-row input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .code-row input:focus {
+      border-color: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(77,163,255,0.18);
+    }
+
+    .code-row input.filled {
+      border-color: rgba(77,163,255,0.45);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(180deg, var(--blue), var(--blue-dark));
+      box-shadow: 0 10px 30px rgba(37,99,235,0.35);
+      transition: opacity .15s, transform .1s;
+      letter-spacing: .2px;
+    }
+    .btn:hover { opacity: .88; }
+    .btn:active { transform: scale(.98); }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    .error {
+      display: none;
+      margin-top: 16px;
+      color: #f87171;
+      font-size: 13px;
+    }
+    .error.visible { display: block; }
+
+    .back {
+      display: block;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .back:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">RWA.Watch</div>
+    <div class="badge">Beta Version</div>
+
+    <h1>Enter Access Code</h1>
+    <p class="desc">Enter your 6-digit invitation code<br>to access the private beta.</p>
+
+    <div class="code-row" id="codeRow">
+      <input type="text" maxlength="1" min="0" max="9" inputmode="numeric" autocomplete="one-time-code" />
+      <input type="text" maxlength="1" min="0" max="9" inputmode="numeric" />
+      <input type="text" maxlength="1" min="0" max="9" inputmode="numeric" />
+      <input type="text" maxlength="1" min="0" max="9" inputmode="numeric" />
+      <input type="text" maxlength="1" min="0" max="9" inputmode="numeric" />
+      <input type="text" maxlength="1" min="0" max="9" inputmode="numeric" />
+    </div>
+
+    <button class="btn" id="submitBtn" disabled>Verify Code</button>
+    <div class="error" id="errorMsg">Invalid code. Please try again.</div>
+
+    <a href="index.html" class="back">← Back to RWA.Watch</a>
+  </div>
+
+  <script>
+    const inputs = Array.from(document.querySelectorAll('.code-row input'));
+    const btn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    // Auto-advance and backspace handling
+    inputs.forEach((inp, i) => {
+      inp.addEventListener('input', () => {
+        // Keep only last digit
+        if (inp.value.length > 1) inp.value = inp.value.slice(-1);
+        inp.classList.toggle('filled', inp.value !== '');
+        if (inp.value && i < inputs.length - 1) inputs[i + 1].focus();
+        checkComplete();
+      });
+
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !inp.value && i > 0) {
+          inputs[i - 1].value = '';
+          inputs[i - 1].classList.remove('filled');
+          inputs[i - 1].focus();
+          checkComplete();
+        }
+      });
+
+      inp.addEventListener('paste', e => {
+        e.preventDefault();
+        const pasted = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+        pasted.split('').forEach((ch, j) => {
+          if (inputs[j]) {
+            inputs[j].value = ch;
+            inputs[j].classList.add('filled');
+          }
+        });
+        const next = Math.min(pasted.length, inputs.length - 1);
+        inputs[next].focus();
+        checkComplete();
+      });
+    });
+
+    function checkComplete() {
+      const full = inputs.every(inp => inp.value !== '');
+      btn.disabled = !full;
+      if (!full) errorMsg.classList.remove('visible');
+    }
+
+    // Focus first input on load
+    inputs[0].focus();
+
+    btn.addEventListener('click', () => {
+      const code = inputs.map(inp => inp.value).join('');
+      // TODO: replace with real validation
+      // e.g. fetch('/api/verify', { method:'POST', body: JSON.stringify({code}) })
+      if (code === '000000') {
+        window.location.href = 'dashboard.html';
+      } else {
+        errorMsg.classList.add('visible');
+        inputs.forEach(inp => {
+          inp.value = '';
+          inp.classList.remove('filled');
+        });
+        inputs[0].focus();
+        checkComplete();
+      }
+    });
+  </script>
+</body>
+</html>
